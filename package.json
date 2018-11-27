@@ -1,0 +1,11 @@
+{
+  "name": "blockchain_manager",
+  "version": "1.0.0",
+  "description": "This application provides interface for basic operations with crypto-currency - Wind Coins",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ./**"
+  },
+  "author": "Oleksa Kushinr",
+  "license": "ISC"
+}
