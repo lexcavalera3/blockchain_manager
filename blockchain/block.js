@@ -52,16 +52,5 @@ function nextBlock(lastBlock) {
   return new Block(index, data, lastHash);
 }
 
-
-let previousBlock = createGenesisBlock();
-let blockToAdd = null;
-const blockchain = [previousBlock];
-const blocksToAdd = 10;
-
-for (let i = 1; i < blocksToAdd; i++) {
-  blockToAdd = nextBlock(previousBlock);
-  blockchain.push(blockToAdd);
-  previousBlock = blockToAdd;
-  console.log(`Block ${blockToAdd.index} has been added to the blockchain!`);
-  console.log(`Hash: ${blockToAdd.hash}\n`);
-}
+module.exports.createGenesisBlock = createGenesisBlock;
+module.exports.nextBlock = nextBlock;
