@@ -4,8 +4,8 @@
   "description": "This application provides interface for basic operations with crypto-currency - Wind Coins",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ext .js",
-    "test": "nyc mocha test/*"
+    "lint": "eslint blockchain test --ext .js",
+    "test": "nyc --all mocha test/*"
   },
   "author": "Oleksa Kushinr",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "js-sha256": "0.9.0",
     "mocha": "5.2.0",
     "nyc": "13.1.0",
+    "rewire": "4.0.1",
     "rooty": "2.0.0"
   },
   "devDependencies": {

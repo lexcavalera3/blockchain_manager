@@ -30,27 +30,51 @@ class Block {
         + this.data.toString()
         + this.previousHash.toString());
   }
+
+  /**
+   * Get proof of work for this block.
+   * @return {number} Pfoof of work.
+   */
+  getProofOfWork() {
+    return this.data['proof-of-work'];
+  }
+
+
+  /**
+   * Get transactions for this block.
+   * @return {array} List of transactions.
+   */
+  getTransactions() {
+    return this.data['transactions'];
+  }
 }
 
 /**
  * Generates first block of the blockchain.
- * @return {object} First block.
+ * @return {Block} First block.
  */
 function createGenesisBlock() {
-  return new Block(0, 'Genesis Block', '0');
+  const genesisData = {
+    'proof-of-work': 1,
+    'transactions': [],
+  };
+  return new Block(0, genesisData, '0');
 }
 
 /**
  * Generates next block of the blockchain
- * @param {object} lastBlock - The last block of blockchain.
- * @return {object} Next block.
+ * @param {Block} lastBlock - The last block of blockchain.
+ * @param {object} newBlockData - Data of the new block.
+ * @return {Block} Next block.
  */
-function nextBlock(lastBlock) {
-  const index = lastBlock.index + 1;
-  const data = 'Hey! I\'m block ' + index.toString();
-  const lastHash = lastBlock.hash;
-  return new Block(index, data, lastHash);
+function generateNextBlock(lastBlock, newBlockData) {
+  return new Block(
+      lastBlock.index + 1,
+      newBlockData,
+      lastBlock.hash
+  );
 }
 
+
 module.exports.createGenesisBlock = createGenesisBlock;
-module.exports.nextBlock = nextBlock;
+module.exports.generateNextBlock = generateNextBlock;
