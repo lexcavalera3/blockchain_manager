@@ -10,10 +10,11 @@ class Block {
    * @param {number} index - The index of the block.
    * @param {string} data - Information, that should be stored.
    * @param {string} previousHash - Previous blocks' hash.
+   * @param {Date} [timestamp=new Date] - blocks' timestamp.
    */
-  constructor(index, data, previousHash) {
+  constructor(index, data, previousHash, timestamp) {
     this.index = index;
-    this.timestamp = new Date();
+    this.timestamp = typeof timestamp !== 'undefined' ? timestamp : new Date();
     this.data = data;
     this.previousHash = previousHash;
     this.hash = this._hashBlock();
@@ -39,13 +40,39 @@ class Block {
     return this.data['proof-of-work'];
   }
 
-
   /**
    * Get transactions for this block.
    * @return {array} List of transactions.
    */
   getTransactions() {
     return this.data['transactions'];
+  }
+
+  /**
+   * Convert block to object.
+   * @return {object} serialized block.
+   */
+  serialize() {
+    return {
+      index: this.index,
+      timestamp: this.timestamp,
+      data: this.data,
+      previousHash: this.previousHash,
+    };
+  }
+
+  /**
+   * Create block from object.
+   * @param {object} block - object, that should be deserialized.
+   * @return {Block} deserialized block.
+   */
+  static deserialize(block) {
+    return new Block(
+        block.index,
+        block.data,
+        block.previousHash,
+        block.timestamp,
+    );
   }
 }
 
@@ -78,3 +105,4 @@ function generateNextBlock(lastBlock, newBlockData) {
 
 module.exports.createGenesisBlock = createGenesisBlock;
 module.exports.generateNextBlock = generateNextBlock;
+module.exports.Block = Block;
