@@ -1,11 +1,10 @@
 /**
  * Contains methods for working with database.
  */
-require('rooty')();
 const MongoClient = require('mongodb').MongoClient;
-const BlockChain = require('^/blockchain/blockchain').BlockChain;
-const db = require('^/config/config').db;
-const dbUrl = `${db.host}:${db.port}/${db.name}`;
+const BlockChain = require('blockchain/blockchain');
+const dbConfig = require('config/config').db;
+const dbUrl = `${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`;
 
 /**
  * Read blockchain from database.
@@ -14,8 +13,8 @@ const dbUrl = `${db.host}:${db.port}/${db.name}`;
 function readBlocks() {
   return new Promise(function(resolve) {
     MongoClient.connect(dbUrl, {useNewUrlParser: true}, function(err, client) {
-      const database = client.db(db.name);
-      const collection = database.collection(db.collectionName);
+      const database = client.db(dbConfig.name);
+      const collection = database.collection(dbConfig.collectionName);
       collection.find().toArray(function(err, blocks) {
         client.close();
         resolve(BlockChain.restoreFromBlocks(blocks));
@@ -33,8 +32,8 @@ function writeBlock(block) {
   return new Promise(function(resolve) {
     MongoClient.connect(
         dbUrl, {useNewUrlParser: true}, function(err, client) {
-          const database = client.db(db.name);
-          const collection = database.collection(db.collectionName);
+          const database = client.db(dbConfig.name);
+          const collection = database.collection(dbConfig.collectionName);
           collection.insertOne(block.serialize());
           client.close();
           resolve(0);
@@ -43,5 +42,4 @@ function writeBlock(block) {
 }
 
 
-module.exports.writeBlock = writeBlock;
-module.exports.readBlocks = readBlocks;
+module.exports = {writeBlock, readBlocks};

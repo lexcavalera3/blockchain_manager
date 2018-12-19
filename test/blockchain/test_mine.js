@@ -1,10 +1,9 @@
-require('rooty')();
 const assert = require('assert');
-const block = require('^/blockchain/block');
-const blockchain = require('^/blockchain/blockchain');
-const transactionsModule = require('^/blockchain/transactions');
+const Block = require('blockchain/block');
+const BlockChain = require('blockchain/blockchain');
+const TrancactionsContainer = require('blockchain/transactions_container');
 const rewire = require('rewire');
-const mine = rewire('^/blockchain/mine');
+const mine = rewire('blockchain/mine');
 
 
 describe('Test mine module', function() {
@@ -27,7 +26,7 @@ describe('Test mine module', function() {
     const expectedTransaction = {
       from: 'network',
       to: minerAddress,
-      amount: 1,
+      amount: 1
     };
 
     const actualTransaction = generateMineTransaction(minerAddress);
@@ -37,25 +36,25 @@ describe('Test mine module', function() {
   });
 
   it('Test mine function', function() {
-    const mineFunction = mine.mine;
+    const mineFunction = mine;
     const generateMineTransaction = mine.__get__('generateMineTransaction');
-    const dummyTransactions = new transactionsModule.Transactions();
-    const dummyBlockChain = new blockchain.BlockChain();
+    const dummyTransactionsContainer = new TrancactionsContainer();
+    const dummyBlockChain = new BlockChain();
     const dummyTransaction = 'Dummy Transaction';
     const minerAddress = 'Dummy Miner Address';
-    dummyTransactions.append(dummyTransaction);
-    const firstBlock = block.createGenesisBlock();
-    dummyBlockChain.append(firstBlock);
+    dummyTransactionsContainer.addTransaction(dummyTransaction);
+    const firstBlock = Block.createGenesisBlock();
+    dummyBlockChain.addBlock(firstBlock);
     const mineTransaction = generateMineTransaction(minerAddress);
 
-    mineFunction(dummyBlockChain, dummyTransactions, minerAddress);
+    mineFunction(dummyBlockChain, dummyTransactionsContainer, minerAddress);
 
-    assert.strictEqual(dummyBlockChain.getLength(), 2,
+    assert.strictEqual(dummyBlockChain.length, 2,
         'There should be 2 blocks in the blockchain.');
-    assert.strictEqual(dummyTransactions.getLength(), 0,
+    assert.strictEqual(dummyTransactionsContainer.length, 0,
         'Transactions should be empty after mining.');
-    const lastBlock = dummyBlockChain.getLastBlock();
-    const transactions = lastBlock.getTransactions();
+    const lastBlock = dummyBlockChain.lastBlock;
+    const transactions = lastBlock.transactions;
     assert.strictEqual(transactions.length, 2,
         'Mine function should add one more transaction.');
     assert.deepEqual(transactions[0], dummyTransaction,

@@ -1,17 +1,16 @@
-require('rooty')();
 const assert = require('assert');
-const transactions = require('^/blockchain/transactions');
+const TransactionsContainer = require('blockchain/transactions_container');
 
 
 describe('Test Transactions class', function() {
-  it('Test clearData method', function() {
-    const firstElement = 'First Element';
-    const secondElement = 'Second Element';
-    const testTransactions = new transactions.Transactions();
-    testTransactions.append(firstElement);
-    testTransactions.append(secondElement);
-    testTransactions.clearData();
-    assert.deepEqual(testTransactions.getData(), [],
+  it('Test clearTransactions method', function() {
+    const firstTransaction = 'First Element';
+    const secondTransaction = 'Second Transaction';
+    const testContainer = new TransactionsContainer();
+    testContainer.addTransaction(firstTransaction);
+    testContainer.addTransaction(secondTransaction);
+    testContainer.clearTransactions();
+    assert.deepEqual(testContainer.transactions, [],
         'Transactions data should be an empty array after clearing.');
   });
 });

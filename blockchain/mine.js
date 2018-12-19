@@ -1,5 +1,3 @@
-const block = require('./block');
-
 const AMOUNT_OF_WORK = 8;
 
 /**
@@ -27,7 +25,7 @@ function generateMineTransaction(minerAddress) {
   return {
     from: 'network',
     to: minerAddress,
-    amount: 1,
+    amount: 1
   };
 }
 
@@ -35,26 +33,26 @@ function generateMineTransaction(minerAddress) {
  * Creates new block and adds it to the blockchain.
  * Also flushes unsaved transactions into the new block.
  * @param {BlockChain} blockChain - Blockchain. ntw block should be added to.
- * @param {Transactions} transactions - Container of unsaved transactions.
+ * @param {TransactionsContainer} transactions - Container of unsaved transactions.
  * @param {string} minerAddress - Address of the miner node.
  */
 function mine(blockChain, transactions, minerAddress) {
-  const lastBlock = blockChain.getLastBlock();
-  const lastProof = lastBlock.getProofOfWork();
+  const lastBlock = blockChain.lastBlock;
+  const lastProof = lastBlock.proofOfWork;
   const proof = proofOfWork(lastProof);
 
-  transactions.append(generateMineTransaction(minerAddress));
+  transactions.addTransaction(generateMineTransaction(minerAddress));
 
   const newBlockData = {
     'proof-of-work': proof,
-    'transactions': transactions.getData(),
+    transactions: transactions.transactions
   };
 
-  const minedBlock = block.generateNextBlock(lastBlock, newBlockData);
-  blockChain.append(minedBlock);
+  const minedBlock = lastBlock.generateNextBlock(newBlockData);
+  blockChain.addBlock(minedBlock);
 
-  transactions.clearData();
+  transactions.clearTransactions();
 }
 
 
-module.exports.mine = mine;
+module.exports = mine;

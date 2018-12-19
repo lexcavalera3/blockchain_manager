@@ -1,4 +1,4 @@
-const sha256 = require('js-sha256').sha256;
+const {sha256} = require('js-sha256');
 
 /**
  * Block - the core of blockchain.
@@ -36,7 +36,7 @@ class Block {
    * Get proof of work for this block.
    * @return {number} Pfoof of work.
    */
-  getProofOfWork() {
+  get proofOfWork() {
     return this.data['proof-of-work'];
   }
 
@@ -44,7 +44,7 @@ class Block {
    * Get transactions for this block.
    * @return {array} List of transactions.
    */
-  getTransactions() {
+  get transactions() {
     return this.data['transactions'];
   }
 
@@ -57,7 +57,7 @@ class Block {
       index: this.index,
       timestamp: this.timestamp,
       data: this.data,
-      previousHash: this.previousHash,
+      previousHash: this.previousHash
     };
   }
 
@@ -71,38 +71,35 @@ class Block {
         block.index,
         block.data,
         block.previousHash,
-        block.timestamp,
+        block.timestamp
+    );
+  }
+
+  /**
+   * Generates first block of the blockchain.
+   * @return {Block} First block.
+   */
+  static createGenesisBlock() {
+    const genesisData = {
+      'proof-of-work': 1,
+      transactions: []
+    };
+    return new Block(0, genesisData, '0');
+  }
+
+  /**
+   * Generates next block of the blockchain
+   * @param {object} newBlockData - Data of the new block.
+   * @return {Block} Next block.
+   */
+  generateNextBlock(newBlockData) {
+    return new Block(
+        this.index + 1,
+        newBlockData,
+        this.hash
     );
   }
 }
 
-/**
- * Generates first block of the blockchain.
- * @return {Block} First block.
- */
-function createGenesisBlock() {
-  const genesisData = {
-    'proof-of-work': 1,
-    'transactions': [],
-  };
-  return new Block(0, genesisData, '0');
-}
 
-/**
- * Generates next block of the blockchain
- * @param {Block} lastBlock - The last block of blockchain.
- * @param {object} newBlockData - Data of the new block.
- * @return {Block} Next block.
- */
-function generateNextBlock(lastBlock, newBlockData) {
-  return new Block(
-      lastBlock.index + 1,
-      newBlockData,
-      lastBlock.hash
-  );
-}
-
-
-module.exports.createGenesisBlock = createGenesisBlock;
-module.exports.generateNextBlock = generateNextBlock;
-module.exports.Block = Block;
+module.exports = Block;

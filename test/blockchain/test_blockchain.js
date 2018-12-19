@@ -1,16 +1,15 @@
-require('rooty')();
 const assert = require('assert');
-const blockChain = require('^/blockchain/blockchain');
+const BlockChain = require('blockchain/blockchain');
 
 
-describe('Test BasicContainer class', function() {
-  it('Test getLastBlock method', function() {
-    const firstElement = 'First Element';
-    const secondElement = 'Second Element';
-    const chain = new blockChain.BlockChain();
-    chain.append(firstElement);
-    chain.append(secondElement);
-    assert.strictEqual(chain.getLastBlock(), secondElement,
-        'Second element should be the last.');
+describe('Test BlockChain class', function() {
+  it('Test LastBlock method', function() {
+    const firstBlock = 'First Block';
+    const secondBlock = 'Second Block';
+    const chain = new BlockChain();
+    chain.addBlock(firstBlock);
+    chain.addBlock(secondBlock);
+    assert.strictEqual(chain.lastBlock, secondBlock,
+        'Second block should be the last.');
   });
 });

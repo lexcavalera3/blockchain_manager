@@ -1,6 +1,5 @@
-require('rooty')();
 const assert = require('assert');
-const block = require('^/blockchain/block');
+const Block = require('blockchain/block');
 
 
 describe('Test Block class', function() {
@@ -9,10 +8,10 @@ describe('Test Block class', function() {
     const dummyTransactions = [];
     const dummyData = {
       'proof-of-work': dummyProofOfWork,
-      'transactions': dummyTransactions,
+      transactions: dummyTransactions
     };
-    const firstBlock = block.createGenesisBlock();
-    const secondBlock = block.generateNextBlock(firstBlock, dummyData);
+    const firstBlock = Block.createGenesisBlock();
+    const secondBlock = firstBlock.generateNextBlock(dummyData);
     assert.strictEqual(
         firstBlock.index + 1, secondBlock.index,
         'Index of the next block should be greater by 1.');
@@ -21,9 +20,9 @@ describe('Test Block class', function() {
         'Hash of the previous block should be equal to the previousHash.');
     assert.ok(firstBlock.timestamp <= secondBlock.timestamp,
         'Next block should have bigger or equal timestamp.');
-    assert.strictEqual(secondBlock.getProofOfWork(), dummyProofOfWork,
+    assert.strictEqual(secondBlock.proofOfWork, dummyProofOfWork,
         'Proof of work should match one passed inside `data` object.');
-    assert.deepEqual(secondBlock.getTransactions(), dummyTransactions,
+    assert.deepEqual(secondBlock.transactions, dummyTransactions,
         'Transactions should match transactions passed inside `data` object.');
     assert.deepEqual(secondBlock.data, dummyData,
         'Data of the block should be equal to one passed to constructor.');
