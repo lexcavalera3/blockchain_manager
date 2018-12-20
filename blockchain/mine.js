@@ -1,3 +1,5 @@
+const Transaction = require('./transaction');
+
 const AMOUNT_OF_WORK = 8;
 
 /**
@@ -17,19 +19,6 @@ function proofOfWork(previousProof) {
 }
 
 /**
- * Creates new mine (create one coin) transaction.
- * @param {string} minerAddress - Address of the miner node.
- * @return {object} New mine transaction.
- */
-function generateMineTransaction(minerAddress) {
-  return {
-    from: 'network',
-    to: minerAddress,
-    amount: 1
-  };
-}
-
-/**
  * Creates new block and adds it to the blockchain.
  * Also flushes unsaved transactions into the new block.
  * @param {BlockChain} blockChain - Blockchain. ntw block should be added to.
@@ -39,12 +28,13 @@ function generateMineTransaction(minerAddress) {
 function mine(blockChain, transactions, minerAddress) {
   const lastBlock = blockChain.lastBlock;
   const lastProof = lastBlock.proofOfWork;
-  const proof = proofOfWork(lastProof);
 
-  transactions.addTransaction(generateMineTransaction(minerAddress));
+  const proof = proofOfWork(lastProof);
+  const mineTransaction = Transaction.createMineTransaction(minerAddress);
+  transactions.addTransaction(mineTransaction);
 
   const newBlockData = {
-    'proof-of-work': proof,
+    proofOfWork: proof,
     transactions: transactions.transactions
   };
 

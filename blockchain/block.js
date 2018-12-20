@@ -1,4 +1,5 @@
 const {sha256} = require('js-sha256');
+const TransactionsContainer = require('./transactions_container');
 
 /**
  * Block - the core of blockchain.
@@ -8,7 +9,7 @@ const {sha256} = require('js-sha256');
 class Block {
   /**
    * @param {number} index - The index of the block.
-   * @param {string} data - Information, that should be stored.
+   * @param {object} data - Information, that should be stored.
    * @param {string} previousHash - Previous blocks' hash.
    * @param {Date} [timestamp=new Date] - blocks' timestamp.
    */
@@ -37,7 +38,7 @@ class Block {
    * @return {number} Pfoof of work.
    */
   get proofOfWork() {
-    return this.data['proof-of-work'];
+    return this.data.proofOfWork;
   }
 
   /**
@@ -45,7 +46,7 @@ class Block {
    * @return {array} List of transactions.
    */
   get transactions() {
-    return this.data['transactions'];
+    return this.data.transactions;
   }
 
   /**
@@ -56,7 +57,10 @@ class Block {
     return {
       index: this.index,
       timestamp: this.timestamp,
-      data: this.data,
+      data: {
+        proofOfWork: this.proofOfWork,
+        transactions: this.transactions.serialize()
+      },
       previousHash: this.previousHash
     };
   }
@@ -67,9 +71,13 @@ class Block {
    * @return {Block} deserialized block.
    */
   static deserialize(block) {
+    const blockData = {
+      proofOfWork: block.data.proofOfWork,
+      transactions: TransactionsContainer.deserialize(block.data.transactions)
+    };
     return new Block(
         block.index,
-        block.data,
+        blockData,
         block.previousHash,
         block.timestamp
     );
@@ -81,8 +89,8 @@ class Block {
    */
   static createGenesisBlock() {
     const genesisData = {
-      'proof-of-work': 1,
-      transactions: []
+      proofOfWork: 1,
+      transactions: new TransactionsContainer()
     };
     return new Block(0, genesisData, '0');
   }
