@@ -1,6 +1,8 @@
 config = {
   blockchain: {
-    defaultMinerAddress: 'Some valid miner address'
+    minerAddress: 'Some valid miner address',
+    applicationPort: 3000,
+    amountOfWork: 8
   },
   db: {
     host: 'mongodb://localhost',

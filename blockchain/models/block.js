@@ -1,8 +1,7 @@
 const {sha256} = require('js-sha256');
-const TransactionsContainer = require('./transactions_container');
 
 /**
- * Block - the core of blockchain.
+ * Block - the core of blockChain.
  * Stores data along with index, creation timestamp and information
  * about previous block.
  */
@@ -35,7 +34,7 @@ class Block {
 
   /**
    * Get proof of work for this block.
-   * @return {number} Pfoof of work.
+   * @return {number} Proof of work.
    */
   get proofOfWork() {
     return this.data.proofOfWork;
@@ -57,10 +56,7 @@ class Block {
     return {
       index: this.index,
       timestamp: this.timestamp,
-      data: {
-        proofOfWork: this.proofOfWork,
-        transactions: this.transactions.serialize()
-      },
+      data: this.data,
       previousHash: this.previousHash
     };
   }
@@ -71,32 +67,28 @@ class Block {
    * @return {Block} deserialized block.
    */
   static deserialize(block) {
-    const blockData = {
-      proofOfWork: block.data.proofOfWork,
-      transactions: TransactionsContainer.deserialize(block.data.transactions)
-    };
     return new Block(
         block.index,
-        blockData,
+        block.data,
         block.previousHash,
         block.timestamp
     );
   }
 
   /**
-   * Generates first block of the blockchain.
+   * Generates first block of the blockChain.
    * @return {Block} First block.
    */
   static createGenesisBlock() {
     const genesisData = {
       proofOfWork: 1,
-      transactions: new TransactionsContainer()
+      transactions: []
     };
     return new Block(0, genesisData, '0');
   }
 
   /**
-   * Generates next block of the blockchain
+   * Generates next block of the blockChain
    * @param {object} newBlockData - Data of the new block.
    * @return {Block} Next block.
    */

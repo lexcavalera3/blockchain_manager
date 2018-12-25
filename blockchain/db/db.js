@@ -2,13 +2,13 @@
  * Contains methods for working with database.
  */
 const {MongoClient} = require('mongodb');
-const BlockChain = require('blockchain/blockchain');
+const BlockChain = require('blockchain/models/blockchain');
 const dbConfig = require('config/config').db;
 const dbUrl = `${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`;
 
 /**
- * Read blockchain from database.
- * @return {BlockChain} blockchain of all blocks from the database.
+ * Read blockChain from database.
+ * @return {BlockChain} blockChain of all blocks from the database.
  */
 async function readBlocks() {
   const client = await MongoClient.connect(dbUrl, {useNewUrlParser: true});

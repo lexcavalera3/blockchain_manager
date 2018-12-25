@@ -1,5 +1,5 @@
 const assert = require('assert');
-const TransactionsContainer = require('blockchain/transactions_container');
+const TransactionsContainer = require('blockchain/models/transactions_container');
 const {dummyTransaction, anotherTransaction} = require('../constants');
 
 

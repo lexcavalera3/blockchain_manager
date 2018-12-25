@@ -1,6 +1,6 @@
-const Block = require('blockchain/block');
-const Transaction = require('blockchain/transaction');
-const TransactionsContainer = require('blockchain/transactions_container');
+const Block = require('blockchain/models/block');
+const Transaction = require('blockchain/models/transaction');
+const TransactionsContainer = require('blockchain/models/transactions_container');
 
 const genesisBlock = Block.createGenesisBlock();
 const dummyProofOfWork = 123;

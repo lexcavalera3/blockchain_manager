@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js",
-    "test": "NODE_PATH=. nyc --all mocha test/*"
+    "test": "NODE_PATH=. nyc --all mocha test/*",
+    "run": "NODE_PATH=. node $NODE_DEBUG_OPTION index.js"
   },
   "author": "Oleksa Kushinr",
   "license": "ISC",
   "dependencies": {
+    "express": "4.16.4",
     "istanbul": "0.4.5",
     "js-sha256": "0.9.0",
     "mocha": "5.2.0",

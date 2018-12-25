@@ -1,11 +1,12 @@
 const assert = require('assert');
 
-const Transaction = require('blockchain/transaction');
+const Transaction = require('blockchain/models/transaction');
 
 
 describe('Test Transaction class.', () => {
   const from = 'From address';
   const to = 'To address';
+  const minerAddress = 'Miner address';
   const amount = 100;
   const dummyTransaction = new Transaction(from, to, amount);
 
@@ -41,6 +42,22 @@ describe('Test Transaction class.', () => {
 
     it('Serialization/deserialization should not change the transaction', () => {
       assert.deepEqual(dummyTransaction, deserializedTransaction);
+    });
+  });
+
+  describe('Test createMineTransaction method.', () => {
+    const mineTransaction = Transaction.createMineTransaction(minerAddress);
+
+    it('Mine transaction should have Network from address.', () => {
+      assert.strictEqual(mineTransaction.from, 'Network');
+    });
+
+    it('Mine transaction should have to address equal to minerAddress.', () => {
+      assert.strictEqual(mineTransaction.to, minerAddress);
+    });
+
+    it('Mine transaction should have amount equal to 1.', () => {
+      assert.strictEqual(mineTransaction.amount, 1);
     });
   });
 });

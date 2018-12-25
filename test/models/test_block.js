@@ -1,6 +1,5 @@
 const assert = require('assert');
-const Block = require('blockchain/block');
-const TransactionsContainer = require('blockchain/transactions_container');
+const Block = require('blockchain/models/block');
 const {
   genesisBlock, secondBlock, dummyProofOfWork,
   secondBlocksData, dummyTransactionsContainer
@@ -18,7 +17,7 @@ describe('Test Block class.', () => {
     });
 
     it('Genesis block should have empty transactions list.', () => {
-      assert.deepEqual(genesisBlock.transactions, new TransactionsContainer());
+      assert.deepEqual(genesisBlock.transactions, []);
     });
 
     it('Genesis block should have previous hash equal to 0.', () => {
@@ -69,7 +68,7 @@ describe('Test Block class.', () => {
     });
 
     it('Serialized block should contain correct serialized transactions.', () => {
-      assert.deepEqual(serializedBlock.data.transactions, secondBlock.transactions.serialize());
+      assert.deepEqual(serializedBlock.data.transactions, secondBlock.transactions);
     });
 
     it('Serialized block should contain correct previous hash.', () => {
