@@ -2,11 +2,13 @@
   "name": "blockchain_manager",
   "version": "1.0.0",
   "description": "This application provides interface for basic operations with crypto-currency - Wind Coins",
-  "main": "index.js",
+  "main": "application.js",
   "scripts": {
     "lint": "eslint . --ext .js",
-    "test": "NODE_PATH=. nyc --all mocha test/*",
-    "run": "NODE_PATH=. node $NODE_DEBUG_OPTION index.js"
+    "test": "NODE_PATH=. nyc --all mocha --timeout 60000 test/*/*",
+    "unit_tests": "NODE_PATH=. mocha test/unit/*",
+    "functional_tests": "NODE_PATH=. mocha --timeout 60000 test/functional/*",
+    "run": "NODE_PATH=. node $NODE_DEBUG_OPTION application.js run"
   },
   "author": "Oleksa Kushinr",
   "license": "ISC",
@@ -18,7 +20,8 @@
     "mongodb": "3.1.10",
     "nyc": "13.1.0",
     "rewire": "4.0.1",
-    "rooty": "2.0.0"
+    "rooty": "2.0.0",
+    "supertest": "3.3.0"
   },
   "devDependencies": {
     "eslint": "5.9.0",

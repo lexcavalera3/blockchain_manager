@@ -5,12 +5,12 @@ class Transaction {
   /**
    * @param {string} from - Address of the sender.
    * @param {string} to - Address of the receiver.
-   * @param {number} amount - Amount of transited coins.
+   * @param {number/string} amount - Amount of transited coins.
    */
   constructor(from, to, amount) {
     this.from = from;
     this.to = to;
-    this.amount = amount;
+    this.amount = Number(amount);
   }
 
   /**

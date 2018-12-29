@@ -1,6 +1,6 @@
 const assert = require('assert');
 const BlockChain = require('blockchain/models/blockchain');
-const {genesisBlock, secondBlock} = require('../constants');
+const {genesisBlock, secondBlock} = require('../../constants');
 
 
 describe('Test BlockChain class', () => {

@@ -3,7 +3,7 @@ const Block = require('blockchain/models/block');
 const {
   genesisBlock, secondBlock, dummyProofOfWork,
   secondBlocksData, dummyTransactionsContainer
-} = require('../constants');
+} = require('../../constants');
 
 
 describe('Test Block class.', () => {
@@ -43,7 +43,7 @@ describe('Test Block class.', () => {
     });
 
     it('Transactions should match transactions passed inside `data` object.', () => {
-      assert.deepEqual(secondBlock.transactions, dummyTransactionsContainer);
+      assert.deepEqual(secondBlock.transactions, dummyTransactionsContainer.serialize());
     });
 
     it('Data of the block should be equal to one passed to constructor.', () => {

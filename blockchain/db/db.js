@@ -32,4 +32,4 @@ async function writeBlock(block) {
 }
 
 
-module.exports = {writeBlock, readBlocks};
+module.exports = {writeBlock, readBlocks, dbUrl};

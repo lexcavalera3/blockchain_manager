@@ -57,7 +57,8 @@ class Block {
       index: this.index,
       timestamp: this.timestamp,
       data: this.data,
-      previousHash: this.previousHash
+      previousHash: this.previousHash,
+      hash: this.hash
     };
   }
 
