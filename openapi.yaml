@@ -1,0 +1,207 @@
+openapi: 3.0.1
+info:
+  title: BlockChain manager API specification
+  description: Specification of available paths and their usage of BlokcChain manager project
+  version: 0.1
+paths:
+  /blockchain:
+    get:
+      description: Get current blockchain
+      responses:
+        200:
+          description: Successfully got current blockchain
+          content:
+            application/json; charset=utf-8:
+              schema:
+                description: Array of blocks ordered by index
+                type: array
+                items:
+                  description: Serialized blocks
+                  type: object
+                  properties:
+                    index:
+                      description: Index of block
+                      type: number
+                      example: 0
+                    timestamp:
+                      description: Timestamp when the block was created
+                      type: dateTime
+                      example: '2018-12-29T08:26:11.343Z'
+                    data:
+                      type: object
+                      properties:
+                        proofOfWork:
+                          description: Proof of work of the block
+                          type: number
+                          example: 100
+                        transactions:
+                          description: Array of transactions, that happened before this block mining including mine transaction
+                          type: array
+                          items:
+                            description: Serialized transaction
+                            type: object
+                            properties:
+                              from:
+                                description: Address from which coins were transferred, or Network - means that the coin was mined
+                                type: string
+                                example: 'Some valid address'
+                              to:
+                                description: Address who receives the coins
+                                type: string
+                                example: 'Some valid address'
+                              amount:
+                                description: Amount of coins transferred
+                                type: number
+                                example: 5
+                    previousHash:
+                      description: Hash or the previous block
+                      type: string
+                      example: '4657c0358edc18bab2eaa6d627870560dfc9f5046ef46ebc93d2702fd068cc6c'
+                    hash:
+                      description: Hash or the current block. Depends on all its properties
+                      type: string
+                      example: '4657c0358edc18bab2eaa6d627870560dfc9f5046ef46ebc93d2702fd068cc6c'
+
+  /mine:
+    get:
+      description: Mine new Block
+      responses:
+        200:
+          description: Successfully mined block
+          content:
+            application/json; charset=utf-8:
+              schema:
+                description: New serialized block
+                type: object
+                properties:
+                  index:
+                    description: Index of block
+                    type: number
+                    example: 0
+                  timestamp:
+                    description: Timestamp when the block was created
+                    type: dateTime
+                    example: '2018-12-29T08:26:11.343Z'
+                  data:
+                    type: object
+                    properties:
+                      proofOfWork:
+                        description: Proof of work of the block
+                        type: number
+                        example: 100
+                      transactions:
+                        description: Array of transactions, that happened before this block mining including mine transaction
+                        type: array
+                        items:
+                          description: Serialized transaction
+                          type: object
+                          properties:
+                            from:
+                              description: Address from which coins were transferred, or Network - means that the coin was mined
+                              type: string
+                              example: 'Some valid address'
+                            to:
+                              description: Address who receives the coins
+                              type: string
+                              example: 'Some valid address'
+                            amount:
+                              description: Amount of coins transferred
+                              type: number
+                              example: 5
+                  previousHash:
+                    description: Hash or the previous block
+                    type: string
+                    example: '4657c0358edc18bab2eaa6d627870560dfc9f5046ef46ebc93d2702fd068cc6c'
+                  hash:
+                    description: Hash or the current block. Depends on all its properties
+                    type: string
+                    example: '4657c0358edc18bab2eaa6d627870560dfc9f5046ef46ebc93d2702fd068cc6c'
+
+  /transactions:
+    get:
+      description: Get srored and new transactions
+      responses:
+        200:
+          description: Successfully retreived transactions
+          content:
+            application/json; charset=utf-8:
+              schema:
+                description: Array of transactions
+                type: array
+                items:
+                  description: Serialized transaction
+                  type: object
+                  properties:
+                    from:
+                      description: Address from which coins were transferred, or Network - means that the coin was mined
+                      type: string
+                      example: 'Some valid address'
+                    to:
+                      description: Address who receives the coins
+                      type: string
+                      example: 'Some valid address'
+                    amount:
+                      description: Amount of coins transferred
+                      type: number
+                      example: 5
+
+  /balance/{address}:
+    get:
+      description: Get balance of coins on given address
+      responses:
+        200:
+          description: Successfully retreived balance
+          content:
+            application/json; charset=utf-8:
+              schema:
+                  description: Object with balance and address data
+                  type: object
+                  properties:
+                    address: Address, which balance we want to check
+                      type: string
+                      example: 'Some valid address'
+                    balance:
+                      description: Amount of coins on given address
+                      type: number
+                      example: 5
+
+  /newTransaction:
+    post:
+      description: Post new transaction of coins
+      parameters:
+      - name: amount
+        in: query
+        schema:
+          type: string
+        example: '4'
+      - name: from
+        in: query
+        schema:
+          type: string
+        example: 'First address'
+      - name: to
+        in: query
+        schema:
+          type: string
+        example: 'Some valid iner address'
+      responses:
+        '200':
+          description: Successfully posted transaction - retreive it serialized
+          content:
+            application/json; charset=utf-8:
+              schema:
+                description: Serialized transaction
+                type: object
+                properties:
+                  from:
+                    description: Address from which coins were transferred, or Network - means that the coin was mined
+                    type: string
+                    example: 'Some valid address'
+                  to:
+                    description: Address who receives the coins
+                    type: string
+                    example: 'Some valid address'
+                  amount:
+                    description: Amount of coins transferred
+                    type: number
+                    example: 5
