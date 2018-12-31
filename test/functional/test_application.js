@@ -2,7 +2,8 @@ const assert = require('assert');
 const request = require('supertest');
 const {clearCollection, assertBlocksEqual} = require('../utils');
 
-const startApplication = require('application');
+const rewire = require('rewire');
+const applicationModule = rewire('application');
 const dbConfig = require('config/config').db;
 const {
   genesisBlock, mineTransaction, testDbName, originalDbName, toAddress,
@@ -16,7 +17,7 @@ describe('Test application', () => {
   before(async () => {
     dbConfig.name = testDbName;
     await clearCollection(dbConfig.collectionName);
-    const appAndServer = await startApplication();
+    const appAndServer = await applicationModule.__get__('startApplication')();
     app = appAndServer.app;
     server = appAndServer.server;
   });
@@ -124,6 +125,69 @@ describe('Test application', () => {
 
     it('Final balance should be greater by amount than initial', () => {
       assert.deepEqual(initialBalance + amount, finalBalance);
+    });
+  });
+
+  describe('test 500 error', () => {
+    let responseCode;
+    let responseText;
+
+    /**
+     * Mock mine function
+     * @return {Promise} - error promise
+     */
+    function mockMineFunction() {
+      return new Promise(() => {
+        throw new Error('error');
+      });
+    }
+
+    before(async () => {
+      const originalMineController = applicationModule.__get__('mineController');
+      const mockMineController = {mine: mockMineFunction};
+      applicationModule.__set__('mineController', mockMineController);
+      const mineResponse = await request(app).get('/mine');
+      applicationModule.__set__('mineController', originalMineController);
+      responseCode = mineResponse.statusCode;
+      responseText = mineResponse.error.text;
+    });
+
+    it('Response status code should be 500', async () => {
+      assert.strictEqual(responseCode, 500);
+    });
+
+    it('Response error text should contain `Internal Server Error`', async () => {
+      assert.ok(responseText.indexOf('Internal Server Error') !== -1);
+    });
+  });
+
+  describe('test 400 error', () => {
+    let responseCode;
+    let responseText;
+
+    /**
+     * Post newTransaction with given query parameters
+     * @param {object} queryParameters - query parameters to post
+     */
+    async function postNewTransaction(queryParameters) {
+      const newTransactionResponse = await request(app).post('/newTransaction').query(queryParameters);
+      responseCode = newTransactionResponse.statusCode;
+      responseText = newTransactionResponse.error.text;
+    }
+
+    it('Response status code should be 400', async () => {
+      await postNewTransaction({});
+      assert.strictEqual(responseCode, 400);
+    });
+
+    it('Response error text should contain `Bad Request`', async () => {
+      await postNewTransaction({});
+      assert.ok(responseText.indexOf('Bad Request') !== -1);
+    });
+
+    it('Response error text should contain `not a valid number`', async () => {
+      await postNewTransaction({amount: 'Not a number'});
+      assert.ok(responseText.indexOf('not a valid number') !== -1);
     });
   });
 });

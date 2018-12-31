@@ -116,6 +116,12 @@ paths:
                     description: Hash or the current block. Depends on all its properties
                     type: string
                     example: '4657c0358edc18bab2eaa6d627870560dfc9f5046ef46ebc93d2702fd068cc6c'
+        500:
+          description: Internal Server Error
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: string
 
   /transactions:
     get:
@@ -185,7 +191,7 @@ paths:
           type: string
         example: 'Some valid iner address'
       responses:
-        '200':
+        200:
           description: Successfully posted transaction - retreive it serialized
           content:
             application/json; charset=utf-8:
@@ -205,3 +211,9 @@ paths:
                     description: Amount of coins transferred
                     type: number
                     example: 5
+        400:
+          description: Bad Request
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: string
